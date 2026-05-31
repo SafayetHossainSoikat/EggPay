@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Safayet Studio · Lite Rewards</title>
+    
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script src='//libtl.com/sdk.js' data-zone='10866872' data-sdk='show_10866872'></script>
+
+    <style>
+        * { font-family: 'Sora', sans-serif; box-sizing: border-box; }
+        
+        :root {
+            --pink-50: #fdf2f8;
+            --pink-100: #fce7f3;
+            --pink-200: #fbcfe8;
+            --pink-300: #f9a8d4;
+            --pink-400: #f472b6;
+            --pink-500: #ec4899;
+            --pink-600: #db2777;
+            --pink-700: #be185d;
+            --pink-800: #9d174d;
+            --rose-400: #fb7185;
+            --rose-500: #f43f5e;
+            --bg-primary: #fff0f7;
+            --bg-secondary: #ffffff;
+            --text-primary: #1a0a14;
+            --text-secondary: #7c3f63;
+            --accent: #ec4899;
+            --accent2: #f43f5e;
+            --border-light: #f9a8d4;
+            --glass-bg: rgba(255, 255, 255, 0.88);
+        }
+        
+        body {
+            background: var(--bg-primary);
+            background-image: 
+                radial-gradient(at 20% 10%, rgba(236,72,153,0.12) 0px, transparent 50%),
+                radial-gradient(at 80% 0%, rgba(244,63,94,0.10) 0px, transparent 50%),
+                radial-gradient(at 0% 80%, rgba(251,113,133,0.08) 0px, transparent 50%);
+            color: var(--text-primary);
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            min-height: 100vh;
+            padding-top: 76px;
+            overflow-x: hidden;
+        }
+
+        /* Floating blobs */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -100px;
+            right: -80px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(236,72,153,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatBlob 8s ease-in-out infinite;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: 100px;
+            left: -60px;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(244,63,94,0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatBlob 10s ease-in-out infinite reverse;
+        }
+        @keyframes floatBlob {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(20px) scale(1.05); }
+        }
+        
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1.5px solid rgba(249,168,212,0.4);
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 20px rgba(236,72,153,0.08), 0 1px 4px rgba(236,72,153,0.05);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #ec4899 0%, #db2777 40%, #be185d 100%);
+            border-radius: 2rem;
+            box-shadow: 0 12px 40px rgba(236,72,153,0.35), 0 4px 12px rgba(236,72,153,0.2);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 160px;
+            height: 160px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .hero-gradient::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            width: 120px;
+            height: 120px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 50%;
+        }
+        
+        .nav-active {
+            background: linear-gradient(135deg, rgba(236,72,153,0.15), rgba(244,63,94,0.10));
+            border-radius: 40px;
+            color: var(--accent) !important;
+        }
+        
+        .tab-content { animation: fadeSlide 0.25s ease; }
+        
+        @keyframes fadeSlide { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        .input-lite {
+            background: var(--bg-primary);
+            border: 1.5px solid var(--border-light);
+            border-radius: 1.25rem;
+            padding: 0.9rem 1.25rem;
+            color: var(--text-primary);
+            font-weight: 500;
+            outline: none;
+            transition: 0.2s;
+        }
+        .input-lite:focus { border-color: var(--accent); background: white; box-shadow: 0 0 0 3px rgba(236,72,153,0.1); }
+        
+        .pfp-img { 
+            width: 46px; height: 46px; border-radius: 50%; 
+            border: 2.5px solid var(--accent); object-fit: cover; 
+        }
+        
+        .hidden { display: none !important; }
+        
+        nav.glass-card { height: 5rem !important; padding: 0.5rem 1rem; }
+        .nav-item { padding: 0.75rem 1rem !important; }
+        
+        .task-card { transition: all 0.2s ease; }
+        .task-card:active { background: rgba(236,72,153,0.05); }
+        
+        .ad-pulse { animation: softPulse 2s infinite; }
+        @keyframes softPulse {
+            0%, 100% { opacity: 1; box-shadow: 0 8px 30px rgba(236,72,153,0.4); }
+            50% { opacity: 0.9; box-shadow: 0 8px 50px rgba(236,72,153,0.6); }
+        }
+
+        .btn-pink {
+            background: linear-gradient(135deg, #ec4899, #db2777);
+            color: white;
+            border: none;
+            border-radius: 1.25rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 6px 20px rgba(236,72,153,0.35);
+        }
+        .btn-pink:active { transform: scale(0.97); box-shadow: 0 3px 10px rgba(236,72,153,0.3); }
+        .btn-pink:disabled { opacity: 0.5; transform: none; }
+
+        .btn-rose {
+            background: linear-gradient(135deg, #f43f5e, #e11d48);
+            color: white;
+            border: none;
+            border-radius: 1.25rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 6px 20px rgba(244,63,94,0.35);
+        }
+        .btn-rose:active { transform: scale(0.97); }
+
+        .article-card {
+            background: white;
+            border-radius: 1.25rem;
+            padding: 1.25rem;
+            border-left: 4px solid #ec4899;
+            box-shadow: 0 2px 12px rgba(236,72,153,0.08);
+            transition: 0.2s;
+        }
+        .article-card h4 { font-size: 1rem; font-weight: 700; color: #be185d; margin-bottom: 0.5rem; }
+        .article-card p { font-size: 0.875rem; color: #7c3f63; line-height: 1.6; }
+        .article-card .article-date { font-size: 0.7rem; color: #f9a8d4; margin-top: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+        
+        /* FIXED HEADER */
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            max-width: 28rem;
+            margin: 0 auto;
+            z-index: 100;
+            background: rgba(253,242,248,0.94);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(249,168,212,0.4);
+            transform: translateZ(0);
+            will-change: transform;
+            backface-visibility: hidden;
+        }
+        .fixed-header .flex { transform: translateZ(0); }
+        #app { position: relative; z-index: 10; }
+        .fixed-header .pfp-img,
+        .fixed-header #user-full-name,
+        .fixed-header .w-11 { transform: translateZ(0); backface-visibility: hidden; }
+
+        /* Coin display */
+        .coin-display {
+            font-family: 'Space Mono', monospace;
+        }
+
+        /* Streak/gamification elements */
+        .streak-fire { animation: fireFlicker 1.5s ease-in-out infinite; }
+        @keyframes fireFlicker {
+            0%, 100% { transform: scale(1) rotate(-2deg); }
+            50% { transform: scale(1.1) rotate(2deg); }
+        }
+
+        /* Pink progress bar */
+        .progress-bar-pink {
+            background: linear-gradient(90deg, #ec4899, #f43f5e);
+            height: 100%;
+            border-radius: 999px;
+            transition: width 0.7s ease;
+        }
+
+        /* Quick action cards */
+        .quick-card {
+            background: white;
+            border: 1.5px solid rgba(249,168,212,0.4);
+            border-radius: 1.5rem;
+            transition: all 0.2s;
+            box-shadow: 0 4px 16px rgba(236,72,153,0.08);
+        }
+        .quick-card:active { transform: scale(0.97); }
+
+        /* Invite page special styles */
+        .invite-hero {
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 50%, #fff0f7 100%);
+            border: 1.5px solid rgba(249,168,212,0.5);
+            border-radius: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .invite-hero::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(236,72,153,0.12) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .ref-link-box {
+            background: linear-gradient(135deg, #fff0f7, #fce7f3);
+            border: 2px dashed #f9a8d4;
+            border-radius: 1.25rem;
+            padding: 1rem 1.25rem;
+        }
+
+        /* Animated badge */
+        .badge-glow {
+            animation: badgeGlow 2s ease-in-out infinite;
+        }
+        @keyframes badgeGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(236,72,153,0.4); }
+            50% { box-shadow: 0 0 20px rgba(236,72,153,0.7); }
+        }
+
+        /* Scroll indicator */
+        .scroll-hint { animation: bounce 2s infinite; }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        /* Leaderboard-style rows */
+        .rank-row {
+            background: white;
+            border-radius: 1rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(249,168,212,0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Floating action hint */
+        .float-hint {
+            animation: floatUp 3s ease-in-out infinite;
+        }
+        @keyframes floatUp {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+
+        /* Pink spinner */
+        .spin-pink { 
+            border-color: #fce7f3;
+            border-top-color: #ec4899;
+        }
+
+        /* Mission card */
+        .mission-card {
+            background: linear-gradient(135deg, #fff0f7, white);
+            border: 1.5px solid rgba(236,72,153,0.2);
+            border-radius: 1.5rem;
+            padding: 1.25rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .mission-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, #ec4899, #f43f5e);
+            border-radius: 0 1.5rem 1.5rem 0;
+        }
+
+        /* Notification dot */
+        .notif-dot {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+    </style>
+</head>
+<body class="pb-32">
+
+    <!-- LOADER -->
+    <div id="loader" class="fixed inset-0 z-[200] flex flex-col items-center justify-center" style="background: #fdf2f8;">
+        <div class="relative w-20 h-20">
+            <div class="absolute inset-0 rounded-full border-4 spin-pink animate-spin" style="border-color: #fce7f3; border-top-color: #ec4899;"></div>
+            <div class="absolute inset-3 rounded-full flex items-center justify-center">
+                <i class="fas fa-heart text-pink-500 text-2xl" style="color: #ec4899;"></i>
+            </div>
+        </div>
+        <p class="mt-6 text-xs font-bold tracking-[0.35em] uppercase" style="color: #ec4899;">Loading...</p>
+        <p class="mt-1 text-[10px] font-semibold" style="color: #f9a8d4;">Safayet Studio</p>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="app" class="max-w-md mx-auto px-4 relative z-10">
+        
+        <!-- FIXED HEADER -->
+        <header class="fixed-header py-2 px-4 flex justify-between items-center rounded-b-2xl shadow-sm">
+            <div class="flex items-center gap-3">
+                <div id="user-pfp-slot" class="flex-shrink-0"></div>
+                <div class="flex-shrink-0">
+                    <h1 id="user-full-name" class="font-bold text-base tracking-tight w-40 truncate" style="color: #1a0a14;">Loading...</h1>
+                    <div class="flex items-center gap-1.5">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-green-400"></span>
+                        </span>
+                        <p class="text-[9px] font-bold uppercase tracking-wider" style="color: #7c3f63;">Online</p>
+                    </div>
+                </div>
+            </div>
+            <button onclick="showTab('notifications')" class="w-11 h-11 glass-card rounded-full flex items-center justify-center relative active:scale-90 transition flex-shrink-0">
+                <i class="fas fa-bell text-sm" style="color: #ec4899;"></i>
+                <span id="notif-badge" class="hidden absolute top-2 right-2 w-2.5 h-2.5 rounded-full ring-2 ring-white notif-dot" style="background: #f43f5e;"></span>
+            </button>
+        </header>
+
+        <main class="pt-2">
+            <!-- HOME TAB -->
+            <section id="tab-home" class="tab-content space-y-4">
+
+                <!-- Hero Balance Card -->
+                <div class="hero-gradient p-6">
+                    <div class="flex justify-between items-start relative z-10">
+                        <div>
+                            <p class="text-[10px] font-extrabold uppercase tracking-[0.25em] opacity-70">Total Balance</p>
+                            <h2 class="text-5xl font-extrabold mt-1 tracking-tight coin-display" id="hero-coin">0</h2>
+                            <div class="flex items-center mt-2 gap-2">
+                                <span class="bg-white/20 px-3 py-1 rounded-full text-white font-bold text-xs backdrop-blur-sm" id="hero-usd">$0.00</span>
+                                <span class="text-[9px] font-bold opacity-60 uppercase tracking-wider">USD Value</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center gap-2">
+                            <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl float-hint" style="background: rgba(255,255,255,0.2);">
+                                <i class="fas fa-gem text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-3 mt-6 pt-5 border-t relative z-10" style="border-color: rgba(255,255,255,0.2);">
+                        <div class="text-center">
+                            <p class="text-[8px] font-bold uppercase tracking-widest opacity-70">Ads/Hour</p>
+                            <p class="text-lg font-extrabold mt-1 coin-display" id="stat-ads-hourly">0/50</p>
+                        </div>
+                        <div class="text-center border-x" style="border-color: rgba(255,255,255,0.2);">
+                            <p class="text-[8px] font-bold uppercase tracking-widest opacity-70">Referrals</p>
+                            <p class="text-lg font-extrabold mt-1" id="stat-refs">0</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-[8px] font-bold uppercase tracking-widest opacity-70">Today</p>
+                            <p class="text-lg font-extrabold mt-1 coin-display" id="stat-today">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div onclick="showTab('earn')" class="quick-card p-5 flex flex-col items-center gap-3 cursor-pointer">
+                        <div class="w-14 h-14 rounded-2xl flex items-center justify-center shadow-md" style="background: linear-gradient(135deg, #fce7f3, #fdf2f8);">
+                            <i class="fas fa-play-circle text-2xl" style="color: #ec4899;"></i>
+                        </div>
+                        <div class="text-center">
+                            <span class="text-xs font-bold uppercase tracking-wider" style="color: #1a0a14;">Watch Ads</span>
+                            <p class="text-[9px] font-semibold mt-0.5" style="color: #ec4899;">+100 / ad</p>
+                        </div>
+                    </div>
+                    <div onclick="showTab('tasks')" class="quick-card p-5 flex flex-col items-center gap-3 cursor-pointer">
+                        <div class="w-14 h-14 rounded-2xl flex items-center justify-center shadow-md" style="background: linear-gradient(135deg, #fce7f3, #fdf2f8);">
+                            <i class="fas fa-star text-2xl" style="color: #db2777;"></i>
+                        </div>
+                        <div class="text-center">
+                            <span class="text-xs font-bold uppercase tracking-wider" style="color: #1a0a14;">Tasks</span>
+                            <p class="text-[9px] font-semibold mt-0.5" style="color: #db2777;">Bonus Coins</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daily Bonus -->
+                <div onclick="claimDaily()" class="glass-card p-4 flex items-center justify-between cursor-pointer active:scale-[0.99] transition">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl streak-fire" style="background: linear-gradient(135deg, #fce7f3, #fdf2f8);">
+                            🎁
+                        </div>
+                        <div>
+                            <p class="font-bold" style="color: #1a0a14;">Daily Bonus</p>
+                            <p class="text-[10px] font-bold uppercase tracking-wide" style="color: #ec4899;">+10,000 Coins (Free)</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-bold px-2 py-1 rounded-full badge-glow" style="background: #fce7f3; color: #db2777;">Claim</span>
+                        <i class="fas fa-chevron-right text-xs" style="color: #f9a8d4;"></i>
+                    </div>
+                </div>
+                <div id="daily-ad-timer-box" class="hidden glass-card p-5 text-center" style="border: 2px solid #f9a8d4; background: #fff0f7;">
+                    <p class="text-sm font-bold" style="color: #db2777;">
+                        <i class="fas fa-hourglass-half mr-2 animate-spin"></i>Daily Bonus Ad: <span id="daily-ad-sec">20</span>s
+                    </p>
+                </div>
+
+                <!-- Engagement: Streak Banner -->
+                <div class="glass-card p-4 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl" style="background: linear-gradient(135deg, #fce7f3, #fff0f7);">
+                        🔥
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-bold text-sm" style="color: #1a0a14;">Keep Your Streak!</p>
+                        <p class="text-xs mt-0.5" style="color: #7c3f63;">Daily login = more bonus multipliers</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xl font-extrabold coin-display" id="streak-count" style="color: #ec4899;">1</p>
+                        <p class="text-[9px] font-bold uppercase" style="color: #f9a8d4;">Days</p>
+                    </div>
+                </div>
+
+                <!-- How to earn more -->
+                <div class="glass-card p-5">
+                    <h4 class="text-xs font-bold uppercase tracking-widest mb-3" style="color: #7c3f63;">Ways to Earn</h4>
+                    <div class="space-y-2.5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-xl flex items-center justify-center text-sm" style="background: #fce7f3;">🎬</div>
+                            <div class="flex-1">
+                                <p class="text-xs font-bold" style="color: #1a0a14;">Watch Ads</p>
+                                <p class="text-[10px]" style="color: #7c3f63;">Up to 50 ads/hour</p>
+                            </div>
+                            <span class="text-xs font-bold" style="color: #ec4899;">+100 each</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-xl flex items-center justify-center text-sm" style="background: #fce7f3;">👥</div>
+                            <div class="flex-1">
+                                <p class="text-xs font-bold" style="color: #1a0a14;">Invite Friends</p>
+                                <p class="text-[10px]" style="color: #7c3f63;">Per successful referral</p>
+                            </div>
+                            <span class="text-xs font-bold" style="color: #ec4899;">+10K each</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-xl flex items-center justify-center text-sm" style="background: #fce7f3;">🎯</div>
+                            <div class="flex-1">
+                                <p class="text-xs font-bold" style="color: #1a0a14;">Complete Tasks</p>
+                                <p class="text-[10px]" style="color: #7c3f63;">One-time rewards</p>
+                            </div>
+                            <span class="text-xs font-bold" style="color: #ec4899;">Varies</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-xl flex items-center justify-center text-sm" style="background: #fce7f3;">🎁</div>
+                            <div class="flex-1">
+                                <p class="text-xs font-bold" style="color: #1a0a14;">Daily Bonus</p>
+                                <p class="text-[10px]" style="color: #7c3f63;">Login every day</p>
+                            </div>
+                            <span class="text-xs font-bold" style="color: #ec4899;">+10K/day</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EARN TAB -->
+            <section id="tab-earn" class="tab-content hidden space-y-5">
+                <div class="glass-card p-7 text-center">
+                    <div class="relative w-28 h-28 mx-auto">
+                        <div class="absolute inset-0 rounded-full blur-2xl opacity-40" style="background: radial-gradient(circle, #ec4899, #db2777);"></div>
+                        <div class="relative w-28 h-28 mx-auto rounded-full flex items-center justify-center shadow-xl float-hint" style="background: linear-gradient(135deg, #ec4899, #db2777);">
+                            <i class="fas fa-video text-white text-4xl"></i>
+                        </div>
+                    </div>
+                    <h2 class="text-2xl font-extrabold mt-5" style="color: #1a0a14;">Watch & Earn</h2>
+                    <p class="text-xs mt-2" style="color: #7c3f63;">1 Ad = <strong style="color: #ec4899;">100 Coins</strong>. Hourly limit: 50 ads. 10s cooldown per ad.</p>
+                    
+                    <div class="mt-6 mb-5">
+                        <div class="w-full h-3 rounded-full overflow-hidden" style="background: #fce7f3;">
+                            <div id="ad-hourly-progress" class="progress-bar-pink" style="width: 0%; height: 100%;"></div>
+                        </div>
+                        <div class="flex justify-between mt-2">
+                            <p id="ad-hourly-status" class="text-[10px] font-bold uppercase" style="color: #7c3f63;">0/50 this hour</p>
+                            <p class="text-[10px] font-bold uppercase" style="color: #ec4899;">Resets Hourly</p>
+                        </div>
+                    </div>
+
+                    <!-- Potential earnings display -->
+                    <div class="rounded-2xl p-3 mb-5 flex justify-between" style="background: #fff0f7;">
+                        <div class="text-center">
+                            <p class="text-[9px] font-bold uppercase" style="color: #7c3f63;">Per Ad</p>
+                            <p class="text-base font-extrabold coin-display" style="color: #ec4899;">100</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-[9px] font-bold uppercase" style="color: #7c3f63;">Max/Hour</p>
+                            <p class="text-base font-extrabold coin-display" style="color: #ec4899;">5K</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-[9px] font-bold uppercase" style="color: #7c3f63;">Today Earned</p>
+                            <p class="text-base font-extrabold coin-display" id="today-earned-earn" style="color: #ec4899;">0</p>
+                        </div>
+                    </div>
+
+                    <button onclick="handleSingleAd()" id="ad-btn" class="ad-pulse btn-pink w-full py-5 rounded-2xl font-extrabold text-sm uppercase tracking-wider">
+                        <i class="fas fa-play mr-2 text-xs"></i> Watch & Earn 100 Coins
+                    </button>
+
+                    <div id="ad-timer-box" class="hidden mt-5 p-4 rounded-2xl" style="background: #fff0f7; border: 1.5px solid #f9a8d4;">
+                        <p class="text-sm font-bold" style="color: #db2777;"><i class="fas fa-hourglass-half mr-2"></i>Ad Playing: <span id="ad-sec">20</span>s</p>
+                    </div>
+                    <div id="cooldown-box" class="hidden mt-5 p-4 rounded-2xl" style="background: #fff8f0; border: 1.5px solid #fed7aa;">
+                        <p class="text-sm font-bold text-orange-600"><i class="fas fa-clock mr-2"></i>Cooldown: <span id="cooldown-sec">10</span>s</p>
+                    </div>
+                    
+                    <p class="text-[10px] mt-4" style="color: #f9a8d4;">*Complete full 20s ad to receive 100 Coins</p>
+                </div>
+
+                <!-- Mini leaderboard teaser -->
+                <div class="glass-card p-5">
+                    <h4 class="text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-2" style="color: #7c3f63;">
+                        <i class="fas fa-trophy" style="color: #ec4899;"></i> Top Earners Today
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="rank-row">
+                            <span class="text-base">🥇</span>
+                            <span class="flex-1 text-xs font-bold" style="color: #1a0a14;">Anonymous</span>
+                            <span class="text-xs font-bold coin-display" style="color: #ec4899;">50K</span>
+                        </div>
+                        <div class="rank-row">
+                            <span class="text-base">🥈</span>
+                            <span class="flex-1 text-xs font-bold" style="color: #1a0a14;">Anonymous</span>
+                            <span class="text-xs font-bold coin-display" style="color: #7c3f63;">35K</span>
+                        </div>
+                        <div class="rank-row">
+                            <span class="text-base">🥉</span>
+                            <span class="flex-1 text-xs font-bold" style="color: #1a0a14;">Anonymous</span>
+                            <span class="text-xs font-bold coin-display" style="color: #7c3f63;">28K</span>
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-center mt-3 font-semibold" style="color: #f9a8d4;">Watch more ads to climb the leaderboard!</p>
+                </div>
+            </section>
+
+            <!-- NOTIFICATIONS -->
+            <section id="tab-notifications" class="tab-content hidden space-y-4">
+                <h3 class="text-xl font-extrabold flex items-center gap-3" style="color: #1a0a14;">
+                    <i class="fas fa-bell" style="color: #ec4899;"></i> Announcements
+                </h3>
+                <div id="notif-list" class="space-y-4 pb-16"></div>
+            </section>
+
+            <!-- TASKS -->
+            <section id="tab-tasks" class="tab-content hidden space-y-3">
+                <h3 class="text-xl font-extrabold flex items-center gap-3" style="color: #1a0a14;">
+                    <i class="fas fa-rocket" style="color: #ec4899;"></i> Available Tasks
+                </h3>
+                <div class="glass-card p-4 flex items-center gap-3" style="background: linear-gradient(135deg, #fff0f7, #fce7f3);">
+                    <span class="text-2xl">💡</span>
+                    <p class="text-xs font-semibold" style="color: #7c3f63;">Complete tasks to earn bonus coins. Tasks are updated regularly!</p>
+                </div>
+                <div id="tasks-list" class="space-y-3"></div>
+                <div id="completed-tasks-section" class="mt-6">
+                    <h4 class="text-sm font-bold uppercase tracking-wider mb-2" style="color: #7c3f63;">Completed</h4>
+                    <div id="completed-tasks-list" class="space-y-2 opacity-60"></div>
+                </div>
+            </section>
+
+            <!-- WALLET -->
+            <section id="tab-wallet" class="tab-content hidden space-y-5">
+                <!-- Balance Summary -->
+                <div class="glass-card p-5" style="background: linear-gradient(135deg, #fff0f7, white);">
+                    <p class="text-[10px] font-bold uppercase tracking-widest" style="color: #7c3f63;">Withdrawable Balance</p>
+                    <p class="text-3xl font-extrabold mt-1 coin-display" id="wallet-balance" style="color: #ec4899;">0</p>
+                    <p class="text-xs mt-1" style="color: #f9a8d4;">Minimum: 10,000,000 Coins</p>
+                </div>
+                <div class="glass-card p-5">
+                    <h3 class="text-xl font-extrabold mb-5 flex items-center gap-3" style="color: #1a0a14;">
+                        <i class="fas fa-wallet" style="color: #ec4899;"></i> Withdraw
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-[10px] font-bold uppercase ml-2" style="color: #7c3f63;">Method</label>
+                            <select id="wd-method" class="input-lite w-full mt-1">
+                                <option value="USDT (TRC20)">USDT (TRC20)</option>
+                                <option value="Solana">Solana</option>
+                                <option value="TON">TON</option>
+                                <option value="Ethereum">Ethereum</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold uppercase ml-2" style="color: #7c3f63;">Wallet Address</label>
+                            <input type="text" id="wd-addr" placeholder="Enter your wallet address" class="input-lite w-full mt-1">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold uppercase ml-2" style="color: #7c3f63;">Amount (Coins)</label>
+                            <input type="number" id="wd-amt" placeholder="Min 10,000,000" class="input-lite w-full mt-1">
+                        </div>
+                        <button onclick="requestPayout()" class="btn-pink w-full py-5 rounded-2xl font-extrabold text-sm uppercase tracking-wider">
+                            <i class="fas fa-paper-plane mr-2"></i>Confirm Request
+                        </button>
+                    </div>
+                </div>
+                <div id="wd-history" class="space-y-3 pb-10"></div>
+            </section>
+
+            <!-- REFER TAB -->
+            <section id="tab-refer" class="tab-content hidden space-y-5 py-2">
+                
+                <!-- Hero Invite Banner -->
+                <div class="invite-hero p-6 text-center">
+                    <div class="relative z-10">
+                        <div class="w-24 h-24 mx-auto rounded-full flex items-center justify-center mb-4 float-hint shadow-xl" style="background: linear-gradient(135deg, #ec4899, #db2777);">
+                            <i class="fas fa-user-plus text-white text-3xl"></i>
+                        </div>
+                        <h2 class="text-2xl font-extrabold" style="color: #1a0a14;">Invite & Earn Big!</h2>
+                        <p class="text-sm mt-2" style="color: #7c3f63;">Share with friends and earn <span class="font-extrabold" style="color: #ec4899;">10,000 Coins</span> per referral</p>
+                        
+                        <!-- Stats row -->
+                        <div class="grid grid-cols-3 gap-3 mt-5">
+                            <div class="rounded-2xl p-3" style="background: white;">
+                                <p class="text-xl font-extrabold coin-display" id="ref-count-display" style="color: #ec4899;">0</p>
+                                <p class="text-[9px] font-bold uppercase tracking-wide mt-0.5" style="color: #7c3f63;">Referrals</p>
+                            </div>
+                            <div class="rounded-2xl p-3" style="background: white;">
+                                <p class="text-xl font-extrabold coin-display" id="ref-earned-display" style="color: #ec4899;">0</p>
+                                <p class="text-[9px] font-bold uppercase tracking-wide mt-0.5" style="color: #7c3f63;">Earned</p>
+                            </div>
+                            <div class="rounded-2xl p-3" style="background: white;">
+                                <p class="text-xl font-extrabold" style="color: #ec4899;">10K</p>
+                                <p class="text-[9px] font-bold uppercase tracking-wide mt-0.5" style="color: #7c3f63;">Per Friend</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Promo Message -->
+                <div class="glass-card p-4">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-lg">📣</span>
+                        <p class="text-xs font-bold uppercase tracking-wider" style="color: #7c3f63;">Your Invite Message</p>
+                    </div>
+                    <div class="rounded-2xl p-4" id="promo-message-box" style="background: #fff0f7; border: 1.5px dashed #f9a8d4;">
+                        <p class="text-xs font-semibold leading-relaxed" style="color: #1a0a14;" id="promo-text">
+                            🎁 <strong>Join Lite Rewards!</strong> Earn coins by watching ads, completing tasks & daily bonuses.<br><br>
+                            💰 Get started with FREE coins just for joining!<br>
+                            🚀 Withdraw via USDT, TON, Solana & more!<br><br>
+                            👉 Join using my invite link:
+                        </p>
+                        <p class="text-xs font-bold mt-2 break-all" id="ref-link" style="color: #ec4899;">Loading...</p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="copyRef()" class="btn-pink py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-2">
+                        <i class="fas fa-copy"></i> Copy Link
+                    </button>
+                    <button onclick="shareRef()" class="btn-rose py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-2">
+                        <i class="fas fa-share-nodes"></i> Share Link
+                    </button>
+                </div>
+
+                <!-- How it works -->
+                <div class="glass-card p-5">
+                    <h4 class="text-xs font-bold uppercase tracking-widest mb-4" style="color: #7c3f63;">How It Works</h4>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-4">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-extrabold text-sm text-white" style="background: linear-gradient(135deg, #ec4899, #db2777);">1</div>
+                            <p class="text-xs font-semibold" style="color: #1a0a14;">Share your unique invite link with friends</p>
+                        </div>
+                        <div class="w-px h-4 ml-4" style="background: #f9a8d4;"></div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-extrabold text-sm text-white" style="background: linear-gradient(135deg, #ec4899, #db2777);">2</div>
+                            <p class="text-xs font-semibold" style="color: #1a0a14;">Friend joins using your link & starts earning</p>
+                        </div>
+                        <div class="w-px h-4 ml-4" style="background: #f9a8d4;"></div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-extrabold text-sm text-white" style="background: linear-gradient(135deg, #ec4899, #db2777);">3</div>
+                            <p class="text-xs font-semibold" style="color: #1a0a14;">You instantly receive <strong style="color: #ec4899;">10,000 Coins!</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Motivational Banner -->
+                <div class="rounded-2xl p-5 text-center" style="background: linear-gradient(135deg, #ec4899, #db2777);">
+                    <p class="text-white font-extrabold text-base">Invite 10 friends = <span class="coin-display">100K</span> Coins! 🎉</p>
+                    <p class="text-white/80 text-xs mt-1">The more you share, the more you earn!</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- BOTTOM NAV -->
+        <nav class="fixed bottom-4 left-4 right-4 glass-card h-20 rounded-full flex justify-around items-center px-3 z-[100] max-w-md mx-auto shadow-xl" style="border-color: rgba(249,168,212,0.5);">
+            <button onclick="showTab('home')" class="nav-item flex flex-col items-center py-2 px-4 nav-active" data-tab="home" style="color: #ec4899;">
+                <i class="fas fa-home text-xl"></i><span class="text-[10px] font-bold mt-1 uppercase">Home</span>
+            </button>
+            <button onclick="showTab('earn')" class="nav-item flex flex-col items-center py-2 px-4" data-tab="earn" style="color: #7c3f63;">
+                <i class="fas fa-circle-play text-xl"></i><span class="text-[10px] font-bold mt-1 uppercase">Earn</span>
+            </button>
+            <button onclick="showTab('tasks')" class="nav-item flex flex-col items-center py-2 px-4" data-tab="tasks" style="color: #7c3f63;">
+                <i class="fas fa-tasks text-xl"></i><span class="text-[10px] font-bold mt-1 uppercase">Tasks</span>
+            </button>
+            <button onclick="showTab('refer')" class="nav-item flex flex-col items-center py-2 px-4" data-tab="refer" style="color: #7c3f63;">
+                <i class="fas fa-users text-xl"></i><span class="text-[10px] font-bold mt-1 uppercase">Refer</span>
+            </button>
+            <button onclick="showTab('wallet')" class="nav-item flex flex-col items-center py-2 px-4" data-tab="wallet" style="color: #7c3f63;">
+                <i class="fas fa-wallet text-xl"></i><span class="text-[10px] font-bold mt-1 uppercase">Wallet</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-analytics.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, onSnapshot, addDoc, query, where, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCFEf-i90TSsHblyxw6NDv9QRJEnNv1ANQ",
+            authDomain: "eggpay.firebaseapp.com",
+            databaseURL: "https://eggpay-default-rtdb.firebaseio.com",
+            projectId: "eggpay",
+            storageBucket: "eggpay.firebasestorage.app",
+            messagingSenderId: "996614381970",
+            appId: "1:996614381970:web:4b3fba05c6f1c0c4daa14b",
+            measurementId: "G-9S18BH2QQL"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+        const tg = window.Telegram.WebApp;
+
+        const COIN_PRICE = 0.000001;
+        const HOURLY_LIMIT = 50;
+        const COOLDOWN_MS = 10 * 1000;
+        const AD_REWARD = 100;          // Updated: 100 coins per ad
+        const DAILY_REWARD = 10000;     // Updated: 10K daily bonus
+        const REF_REWARD = 10000;       // Updated: 10K per referral
+        const MIN_WITHDRAW = 10000000;  // Updated: 10M minimum
+
+        let u = null, adLock = false, adTimer = null;
+        let dailyAdLock = false, dailyAdTimer = null;
+        let cooldownTimer = null;
+
+        // Format number with K/M suffix
+        function formatCoins(num) {
+            num = Math.floor(num);
+            if (num >= 1000000) {
+                const val = num / 1000000;
+                return val % 1 === 0 ? val + 'M' : val.toFixed(2).replace(/\.?0+$/, '') + 'M';
+            }
+            if (num >= 1000) {
+                const val = num / 1000;
+                return val % 1 === 0 ? val + 'K' : val.toFixed(2).replace(/\.?0+$/, '') + 'K';
+            }
+            return num.toString();
+        }
+
+        function resetHourlyIfNeeded() {
+            if (!u) return false;
+            const now = Date.now();
+            const lastReset = u.hourlyAdReset || 0;
+            if (now - lastReset >= 3600000) {
+                updateDoc(doc(db, "users", u.uid), { adsThisHour: 0, hourlyAdReset: now });
+                return true;
+            }
+            return false;
+        }
+
+        function getCooldownRemaining() {
+            if (!u || !u.lastAdTimestamp) return 0;
+            const elapsed = Date.now() - u.lastAdTimestamp;
+            return Math.max(0, COOLDOWN_MS - elapsed);
+        }
+
+        async function init() {
+            tg.expand(); tg.ready();
+            const user = tg.initDataUnsafe?.user || { id: 996614381970, first_name: "Member", username: "guest", photo_url: "" };
+            const uid = user.id.toString();
+            const userRef = doc(db, "users", uid);
+            const snap = await getDoc(userRef);
+
+            if (!snap.exists()) {
+                const startParam = tg.initDataUnsafe?.start_param;
+                u = {
+                    uid, name: user.first_name, balance: 0,
+                    adsThisHour: 0, hourlyAdReset: Date.now(),
+                    lastAdTimestamp: 0,
+                    referralCount: 0, completedTasks: [],
+                    lastDaily: 0, photo: user.photo_url || "",
+                    todayEarned: 0, todayDate: new Date().toDateString(),
+                    streak: 1
+                };
+                await setDoc(userRef, u);
+                if (startParam && startParam !== uid) {
+                    await updateDoc(doc(db, "users", startParam), { balance: increment(REF_REWARD), referralCount: increment(1) });
+                }
+            } else {
+                u = snap.data();
+                if (!u.hourlyAdReset) await updateDoc(userRef, { hourlyAdReset: Date.now(), adsThisHour: 0 });
+                if (u.lastAdTimestamp === undefined) await updateDoc(userRef, { lastAdTimestamp: 0 });
+                // Reset today's earned if new day
+                if (u.todayDate !== new Date().toDateString()) {
+                    await updateDoc(userRef, { todayEarned: 0, todayDate: new Date().toDateString() });
+                }
+                await updateDoc(userRef, { photo: user.photo_url || "", name: user.first_name });
+            }
+
+            resetHourlyIfNeeded();
+            onSnapshot(userRef, (doc) => { u = doc.data(); updateUI(); renderTasks(); checkCooldownUI(); });
+            loadNotifications(); loadHistory(uid);
+            
+            document.getElementById('loader').classList.add('hidden');
+            document.getElementById('app').classList.remove('hidden');
+        }
+
+        function updateUI() {
+            const bal = Math.floor(u.balance);
+            document.getElementById('hero-coin').innerText = formatCoins(bal);
+            document.getElementById('hero-usd').innerText = `$${(bal * COIN_PRICE).toFixed(5)}`;
+            document.getElementById('user-full-name').innerText = u.name;
+            document.getElementById('stat-ads-hourly').innerText = `${u.adsThisHour || 0}/50`;
+            document.getElementById('stat-refs').innerText = u.referralCount || 0;
+            document.getElementById('stat-today').innerText = formatCoins(u.todayEarned || 0);
+            document.getElementById('ad-hourly-status').innerText = `${u.adsThisHour || 0}/50 this hour`;
+            document.getElementById('ad-hourly-progress').style.width = `${((u.adsThisHour || 0)/HOURLY_LIMIT)*100}%`;
+            
+            const refLink = `https://t.me/EggPay_Bot?start=${u.uid}`;
+            document.getElementById('ref-link').innerText = refLink;
+            document.getElementById('streak-count').innerText = u.streak || 1;
+
+            // Wallet balance display
+            const walletEl = document.getElementById('wallet-balance');
+            if (walletEl) walletEl.innerText = formatCoins(bal);
+
+            // Refer page stats
+            const refCountEl = document.getElementById('ref-count-display');
+            const refEarnedEl = document.getElementById('ref-earned-display');
+            if (refCountEl) refCountEl.innerText = u.referralCount || 0;
+            if (refEarnedEl) refEarnedEl.innerText = formatCoins((u.referralCount || 0) * REF_REWARD);
+
+            // Earn tab today earned
+            const todayEarnEl = document.getElementById('today-earned-earn');
+            if (todayEarnEl) todayEarnEl.innerText = formatCoins(u.todayEarned || 0);
+            
+            // PFP
+            const slot = document.getElementById('user-pfp-slot');
+            slot.innerHTML = u.photo ? 
+                `<img src="${u.photo}" class="pfp-img shadow-md" loading="eager" alt="pfp">` : 
+                `<div class="pfp-img flex items-center justify-center font-extrabold text-white text-xl" style="background: linear-gradient(135deg, #ec4899, #db2777);">${u.name.charAt(0)}</div>`;
+        }
+
+        function checkCooldownUI() {
+            const remaining = getCooldownRemaining();
+            const btn = document.getElementById('ad-btn');
+            const cooldownBox = document.getElementById('cooldown-box');
+            
+            if (remaining > 0) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-clock mr-2"></i> Cooldown...';
+                cooldownBox.classList.remove('hidden');
+                startCooldownDisplay(remaining);
+            } else {
+                if (!adLock) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-play mr-2 text-xs"></i> Watch & Earn 100 Coins';
+                }
+                cooldownBox.classList.add('hidden');
+                if (cooldownTimer) clearInterval(cooldownTimer);
+            }
+        }
+
+        function startCooldownDisplay(totalMs) {
+            if (cooldownTimer) clearInterval(cooldownTimer);
+            let remaining = totalMs;
+            const secSpan = document.getElementById('cooldown-sec');
+            cooldownTimer = setInterval(() => {
+                remaining -= 1000;
+                if (remaining <= 0) { clearInterval(cooldownTimer); checkCooldownUI(); return; }
+                secSpan.innerText = Math.floor(remaining / 1000);
+            }, 1000);
+        }
+
+        window.handleSingleAd = async () => {
+            if (adLock) return;
+            resetHourlyIfNeeded();
+            const cooldownRemaining = getCooldownRemaining();
+            if (cooldownRemaining > 0) { tg.showAlert(`Cooldown active. Please wait ${Math.ceil(cooldownRemaining/1000)} seconds.`); return; }
+            if ((u.adsThisHour || 0) >= HOURLY_LIMIT) { tg.showAlert("Hourly limit reached (50 ads). Please wait for the next hour."); return; }
+
+            if (typeof show_10866872 === 'function') {
+                try { show_10866872({ type: 'inApp', inAppSettings: { frequency: 1, capping: 0.01, interval: 0, timeout: 0, everyPage: false } }); } 
+                catch(e) { tg.showAlert("Ad service unavailable. Try again later."); return; }
+            } else { tg.showAlert("Ad SDK failed to load. Please restart the app."); return; }
+
+            adLock = true;
+            const btn = document.getElementById('ad-btn'); 
+            btn.disabled = true; 
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Ad Playing...';
+            const box = document.getElementById('ad-timer-box'); 
+            box.classList.remove('hidden');
+            const secSpan = document.getElementById('ad-sec');
+            let timer = 20;
+            
+            if (adTimer) clearInterval(adTimer);
+            adTimer = setInterval(async () => {
+                timer--; secSpan.innerText = timer;
+                if (timer <= 0) {
+                    clearInterval(adTimer);
+                    await updateDoc(doc(db, "users", u.uid), { 
+                        balance: increment(AD_REWARD),
+                        adsThisHour: increment(1),
+                        lastAdTimestamp: Date.now(),
+                        todayEarned: increment(AD_REWARD)
+                    });
+                    adLock = false; 
+                    box.classList.add('hidden');
+                    checkCooldownUI();
+                    tg.showConfirm(`✅ +${AD_REWARD} Coins added!`);
+                }
+            }, 1000);
+        };
+
+        window.claimDaily = async () => {
+            if (dailyAdLock) return;
+            const now = Date.now();
+            if (now - (u.lastDaily || 0) < 86400000) { tg.showAlert("Already claimed today. Come back tomorrow! 💕"); return; }
+
+            if (typeof show_10866872 === 'function') {
+                try { show_10866872({ type: 'inApp', inAppSettings: { frequency: 1, capping: 0.01, interval: 0, timeout: 0, everyPage: false } }); } 
+                catch(e) { tg.showAlert("Ad service unavailable."); return; }
+            } else { tg.showAlert("Ad SDK failed to load."); return; }
+
+            dailyAdLock = true;
+            const box = document.getElementById('daily-ad-timer-box'); 
+            box.classList.remove('hidden');
+            const secSpan = document.getElementById('daily-ad-sec');
+            let timer = 20;
+            
+            if (dailyAdTimer) clearInterval(dailyAdTimer);
+            dailyAdTimer = setInterval(async () => {
+                timer--; secSpan.innerText = timer;
+                if (timer <= 0) {
+                    clearInterval(dailyAdTimer);
+                    await updateDoc(doc(db, "users", u.uid), { 
+                        balance: increment(DAILY_REWARD), 
+                        lastDaily: Date.now(),
+                        todayEarned: increment(DAILY_REWARD)
+                    });
+                    dailyAdLock = false; 
+                    box.classList.add('hidden');
+                    tg.showConfirm(`🎁 Daily Bonus +${DAILY_REWARD.toLocaleString()} Coins claimed!`);
+                }
+            }, 1000);
+        };
+
+        async function loadNotifications() {
+            onSnapshot(query(collection(db, "notifications"), orderBy("timestamp", "desc"), limit(20)), (snap) => {
+                const cont = document.getElementById('notif-list');
+                cont.innerHTML = '';
+                if(snap.empty) { 
+                    cont.innerHTML = '<div class="glass-card p-6 text-center text-sm" style="color: #7c3f63;">No announcements yet</div>'; 
+                    document.getElementById('notif-badge')?.classList.add('hidden');
+                    return; 
+                }
+                document.getElementById('notif-badge')?.classList.remove('hidden');
+                snap.forEach(d => {
+                    const n = d.data();
+                    const dateStr = n.timestamp?.toDate ? n.timestamp.toDate().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }) : '';
+                    cont.innerHTML += `<div class="article-card">
+                        <h4>📢 ${n.title || 'Announcement'}</h4>
+                        <p>${n.message || ''}</p>
+                        ${dateStr ? `<div class="article-date">${dateStr}</div>` : ''}
+                    </div>`;
+                });
+            });
+        }
+
+        async function renderTasks() {
+            onSnapshot(collection(db, "tasks"), (snap) => {
+                const activeCont = document.getElementById('tasks-list');
+                const completedCont = document.getElementById('completed-tasks-list');
+                activeCont.innerHTML = '';
+                completedCont.innerHTML = '';
+                let hasActive = false, hasCompleted = false;
+                
+                snap.forEach(d => {
+                    const t = d.data();
+                    const isDone = u.completedTasks?.includes(d.id);
+                    
+                    if (isDone) {
+                        hasCompleted = true;
+                        completedCont.innerHTML += `<div class="glass-card p-3 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl flex items-center justify-center text-sm" style="background: #fce7f3; color: #ec4899;">✓</div>
+                                <p class="font-bold text-sm line-through" style="color: #7c3f63;">${t.title}</p>
+                            </div>
+                            <span class="text-xs font-bold" style="color: #ec4899;">+${t.reward}</span>
+                        </div>`;
+                    } else {
+                        hasActive = true;
+                        activeCont.innerHTML += `<div class="mission-card task-card flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #fce7f3, #fff0f7); color: #ec4899;"><i class="fas fa-link"></i></div>
+                                <div>
+                                    <p class="font-bold" style="color: #1a0a14;">${t.title}</p>
+                                    <p class="text-xs font-bold" style="color: #ec4899;">+${formatCoins(t.reward)} Coins</p>
+                                </div>
+                            </div>
+                            <button onclick="window.completeTask('${d.id}','${t.link}',${t.reward})" class="btn-pink px-5 py-2.5 rounded-xl text-xs font-bold">Start</button>
+                        </div>`;
+                    }
+                });
+                
+                if (!hasActive) activeCont.innerHTML = '<p class="text-center text-sm py-6" style="color: #f9a8d4;">No active tasks available.</p>';
+                if (!hasCompleted) completedCont.innerHTML = '<p class="text-center text-xs py-2" style="color: #f9a8d4;">No completed tasks yet.</p>';
+            });
+        }
+
+        window.completeTask = async (id, link, reward) => {
+            if (u.completedTasks?.includes(id)) { tg.showAlert("Task already completed!"); return; }
+            window.open(link, '_blank');
+            await updateDoc(doc(db, "users", u.uid), { balance: increment(reward), completedTasks: [...(u.completedTasks || []), id], todayEarned: increment(reward) });
+            tg.showConfirm(`🎉 Task completed! +${reward} Coins added.`);
+        };
+
+        window.requestPayout = async () => {
+            const amt = parseInt(document.getElementById('wd-amt').value);
+            const addr = document.getElementById('wd-addr').value.trim();
+            const method = document.getElementById('wd-method').value;
+            
+            if (!addr) { tg.showAlert("Please enter your wallet address."); return; }
+            if (isNaN(amt) || amt < MIN_WITHDRAW) { 
+                tg.showAlert("⚠️ Minimum withdrawal is 10,000,000 Coins (10M)."); 
+                return; 
+            }
+            if (amt > u.balance) { tg.showAlert("❌ Insufficient balance!"); return; }
+            
+            await updateDoc(doc(db, "users", u.uid), { balance: increment(-amt) });
+            await addDoc(collection(db, "withdrawals"), {
+                uid: u.uid, name: u.name, amount: amt, method: method,
+                address: addr, status: "Pending", createdAt: serverTimestamp()
+            });
+            tg.showAlert("✅ Withdrawal request sent successfully!");
+            document.getElementById('wd-amt').value = '';
+            document.getElementById('wd-addr').value = '';
+        };
+
+        async function loadHistory(uid) {
+            onSnapshot(query(collection(db, "withdrawals"), where("uid", "==", uid), orderBy("createdAt", "desc"), limit(5)), (snap) => {
+                const box = document.getElementById('wd-history');
+                box.innerHTML = '<h4 class="text-xs font-bold uppercase tracking-wider mb-2 ml-2" style="color: #7c3f63;">Recent Withdrawals</h4>';
+                if (snap.empty) { box.innerHTML += '<p class="text-center text-xs py-4" style="color: #f9a8d4;">No withdrawals yet</p>'; return; }
+                snap.forEach(d => {
+                    const h = d.data();
+                    box.innerHTML += `<div class="glass-card p-4 flex justify-between">
+                        <div><p class="font-bold text-sm" style="color: #1a0a14;">${h.method}</p><p class="text-[10px] truncate max-w-[140px]" style="color: #7c3f63;">${h.address}</p></div>
+                        <div class="text-right"><p class="font-bold coin-display" style="color: #1a0a14;">${formatCoins(h.amount)}</p><span class="text-[9px] font-bold ${h.status==='Pending'?'text-orange-500':'text-green-600'}">${h.status}</span></div>
+                    </div>`;
+                });
+            });
+        }
+
+        window.showTab = (id) => {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+            document.getElementById(`tab-${id}`).classList.remove('hidden');
+            document.querySelectorAll('.nav-item').forEach(n => { 
+                n.classList.remove('nav-active'); 
+                n.style.color = '#7c3f63'; 
+            });
+            const activeNav = document.querySelector(`[data-tab="${id}"]`);
+            if (activeNav) { activeNav.classList.add('nav-active'); activeNav.style.color = '#ec4899'; }
+            if(id === 'notifications') document.getElementById('notif-badge')?.classList.add('hidden');
+            window.scrollTo(0,0);
+
+            // Show ad on tab switch (engagement)
+            if (typeof show_10866872 === 'function') {
+                try { show_10866872({ type: 'inApp', inAppSettings: { frequency: 1, capping: 0.05, interval: 30, timeout: 5, everyPage: false } }); } 
+                catch(e) {}
+            }
+        };
+
+        window.copyRef = () => { 
+            const refLink = document.getElementById('ref-link').innerText;
+            const promoMsg = `🎁 Join Lite Rewards! Earn coins by watching ads, completing tasks & daily bonuses.\n\n💰 Get started with FREE coins just for joining!\n🚀 Withdraw via USDT, TON, Solana & more!\n\n👉 Join using my invite link:\n${refLink}`;
+            navigator.clipboard?.writeText(promoMsg); 
+            tg.showAlert("✅ Promo message + link copied!");
+        };
+
+        window.shareRef = () => {
+            const refLink = document.getElementById('ref-link').innerText;
+            const promoMsg = `🎁 Join Lite Rewards! Earn coins by watching ads, completing tasks & daily bonuses.\n\n💰 Get started with FREE coins just for joining!\n🚀 Withdraw via USDT, TON, Solana & more!\n\n👉 ${refLink}`;
+            if (tg.openTelegramLink) {
+                const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(refLink)}&text=${encodeURIComponent('🎁 Join Lite Rewards! Earn coins by watching ads & tasks. Withdraw via USDT, TON & more!')}`;
+                tg.openTelegramLink(shareUrl);
+            } else if (navigator.share) {
+                navigator.share({ title: 'Lite Rewards', text: promoMsg, url: refLink });
+            } else {
+                navigator.clipboard?.writeText(promoMsg);
+                tg.showAlert("Link copied to clipboard!");
+            }
+        };
+
+        window.addEventListener('beforeunload', ()=> { 
+            if(adTimer) clearInterval(adTimer); 
+            if(dailyAdTimer) clearInterval(dailyAdTimer);
+            if(cooldownTimer) clearInterval(cooldownTimer);
+        });
+
+        init();
+    </script>
+</body>
+</html>
